@@ -18,7 +18,7 @@ These are non-negotiable. If an agent suggests changing them, reject it.
 
 ### Backend
 - **FastAPI** with `lifespan` handler
-- **SQLAlchemy 2.0** — `DeclarativeBase` from `app.models.base`, NOT `declarative_base()`
+- **SQLAlchemy 2.0** — `DeclarativeBase` from `app.models.base`, NOT `declarative_base()`. Do NOT use `MappedAsDataclass`.
 - **Pydantic v2** schemas with `ConfigDict(from_attributes=True)`
 - **Async SQLAlchemy** — `create_async_engine` + `AsyncSession`
 - **Repository pattern** — all DB access through `app/repositories/`
@@ -118,6 +118,9 @@ Available components:
 | **Using non-standard Postgres port in tests** | CI service maps 5432 only | Always use `localhost:5432` in conftest.py |
 | **Upgrading `pytest-asyncio`** | v1.3.0 breaks fixture scoping | Keep `pytest-asyncio==0.24.0` pinned |
 | **Deleting `.github/workflows/ci.yml`** | No CI runs, no quality gate | Leave CI workflow intact |
+| **Missing `src/lib/utils.ts`** | Pre-built UI components fail to import `cn()` | Already in scaffold — do NOT delete |
+| **Using `MappedAsDataclass` in `Base`** | Relationship/foreign-key sync conflicts on flush | Use plain `DeclarativeBase` only |
+| **Timezone-aware `datetime` in models** | `DataError` with `TIMESTAMP WITHOUT TIME ZONE` | Use naive UTC: `datetime.now(timezone.utc).replace(tzinfo=None)` |
 
 ## Database Rules
 
@@ -165,5 +168,8 @@ Available components:
 | dclaw-crm | 8095 | 3006 | dclaw_crm |
 | dclaw-finance | 8096 | 3007 | dclaw_finance |
 | dclaw-hr | 8097 | 3008 | dclaw_hr |
-| **TBD #9** | **8098** | **3009** | **dclaw_xxx** |
-| **TBD #10** | **8100** | **3010** | **dclaw_xxx** |
+| dclaw-inventory | 8098 | 3009 | dclaw_inventory |
+| dclaw-project | 8100 | 3010 | dclaw_project |
+| dclaw-support | 8101 | 3014 | dclaw_support |
+| dclaw-marketing | 8102 | 3015 | dclaw_marketing |
+| dclaw-real-estate | 8103 | 3016 | dclaw_real_estate |
