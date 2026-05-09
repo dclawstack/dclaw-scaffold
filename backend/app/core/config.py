@@ -3,20 +3,15 @@ from functools import lru_cache
 
 
 class Settings(BaseSettings):
-    app_name: str = "DClaw CRM"
+    app_name: str = "DClaw App"
     app_env: str = "dev"
     debug: bool = True
 
-    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/dclaw_crm"
-    
-    ollama_url: str = "http://localhost:11434"
-    ollama_model: str = "llama3.1"
-    openrouter_api_key: str = ""
-    openrouter_model: str = "meta-llama/llama-3.1-8b-instruct"
-    
+    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/dclaw_app"
+
     secret_key: str = "change-me-in-production"
     access_token_expire_minutes: int = 60
-    
+
     class Config:
         env_file = ".env"
         case_sensitive = False

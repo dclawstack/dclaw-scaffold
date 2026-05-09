@@ -90,6 +90,8 @@ These are non-negotiable. If an agent suggests changing them, reject it.
 
 The scaffold includes working UI components in `frontend/src/components/ui/`. **Use these directly.** Do NOT install shadcn CLI or `@base-ui/react`.
 
+**Required dependency:** `tailwindcss-animate` must be in `package.json` dependencies (not devDependencies) because `tailwind.config.ts` imports it via `plugins: [require("tailwindcss-animate")]`.
+
 Available components:
 - `Button` — variants: default, destructive, outline, secondary, ghost, link
 - `Card` — Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter
@@ -120,12 +122,14 @@ Available components:
 | **Deleting `.github/workflows/ci.yml`** | No CI runs, no quality gate | Leave CI workflow intact |
 | **Missing `src/lib/utils.ts`** | Pre-built UI components fail to import `cn()` | Already in scaffold — do NOT delete |
 | **Using `MappedAsDataclass` in `Base`** | Relationship/foreign-key sync conflicts on flush | Use plain `DeclarativeBase` only |
-| **Timezone-aware `datetime` in models** | `DataError` with `TIMESTAMP WITHOUT TIME ZONE` | Use naive UTC: `datetime.now(timezone.utc).replace(tzinfo=None)` |
+| **`default_factory` in `mapped_column()`** | SQLAlchemy interprets it as dataclass config; throws `ArgumentError` on plain `DeclarativeBase` | Use `default=` with a callable (e.g., `default=uuid.uuid4`) |
+| **Timezone-aware `datetime` in models** | `DataError` with `TIMESTAMP WITHOUT TIME ZONE` | Use `utc_now()` from `app.core.utils` or `datetime.now(timezone.utc).replace(tzinfo=None)` |
 
 ## Database Rules
 
 1. All models MUST inherit from `Base` in `app.models.base`
 2. All models MUST use `Mapped[...]` and `mapped_column()`
+3. **Never use `default_factory=` in `mapped_column()`** — use `default=` instead
 3. Relationships MUST specify `lazy="selectin"`
 4. All new tables MUST get an alembic migration
 5. Use `ondelete="CASCADE"` for child tables
@@ -173,3 +177,8 @@ Available components:
 | dclaw-support | 8101 | 3014 | dclaw_support |
 | dclaw-marketing | 8102 | 3015 | dclaw_marketing |
 | dclaw-real-estate | 8103 | 3016 | dclaw_real_estate |
+| dclaw-sales | 8104 | 3017 | dclaw_sales |
+| dclaw-recruit | 8105 | 3018 | dclaw_recruit |
+| dclaw-vendor | 8106 | 3019 | dclaw_vendor |
+| dclaw-doc | 8107 | 3020 | dclaw_doc |
+| dclaw-calendar | 8108 | 3021 | dclaw_calendar |
